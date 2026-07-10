@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, HeartPulse, Sparkles } from 'lucide-react';
+import { Menu, X, HeartPulse, Sparkles, ExternalLink } from 'lucide-react';
 import { TabType } from '../types';
 
 interface NavbarProps {
@@ -82,6 +82,15 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setTab }) => {
               );
             })}
             <div className="h-6 w-[1px] bg-slate-200 mx-3"></div>
+            <a
+              href="https://prime-visita.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 text-sm font-medium transition-all duration-200 flex items-center gap-1.5 cursor-pointer shadow-3xs active:scale-[0.98]"
+            >
+              <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
+              Acessar App
+            </a>
             <button
               onClick={() => handleNavClick('beta')}
               id="nav-cta-demo"
@@ -127,7 +136,16 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setTab }) => {
                 </button>
               );
             })}
-            <div className="pt-4 pb-1 border-t border-slate-100 px-4">
+            <div className="pt-4 pb-1 border-t border-slate-100 px-4 space-y-2">
+              <a
+                href="https://prime-visita.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-2.5 px-4 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 text-center text-base font-medium transition-colors flex items-center justify-center gap-2 shadow-xs"
+              >
+                <ExternalLink className="w-4 h-4 text-slate-400" />
+                Acessar App
+              </a>
               <button
                 onClick={() => handleNavClick('beta')}
                 id="mobile-nav-cta"

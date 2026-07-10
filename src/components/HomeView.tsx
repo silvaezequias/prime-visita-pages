@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   ArrowRight, Check, Plus, AlertCircle, HeartPulse, Sparkles, 
-  ChevronDown, MessageSquare, ShieldCheck, Zap, Star
+  ChevronDown, MessageSquare, ShieldCheck, Zap, Star, ExternalLink
 } from 'lucide-react';
 import { TabType } from '../types';
 import { features, faqList } from '../data';
@@ -117,6 +117,15 @@ export const HomeView: React.FC<HomeViewProps> = ({ setTab }) => {
                   Acessar Beta Privada
                   <ArrowRight className="w-4.5 h-4.5" />
                 </button>
+                <a
+                  href="https://prime-visita.vercel.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-6 py-3.5 rounded-xl bg-white border border-slate-200 text-slate-700 font-medium hover:bg-slate-50 hover:border-slate-300 active:scale-98 transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 font-display shadow-3xs"
+                >
+                  <ExternalLink className="w-4.5 h-4.5 text-slate-400" />
+                  Acessar App
+                </a>
                 <button
                   onClick={() => setTab('pricing')}
                   id="hero-cta-pricing"
@@ -557,6 +566,15 @@ export const HomeView: React.FC<HomeViewProps> = ({ setTab }) => {
               >
                 Garantir Vaga no Beta Privado
               </button>
+              <a
+                href="https://prime-visita.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-6 py-3.5 rounded-xl bg-slate-900 border border-slate-800 text-white font-medium hover:bg-slate-850 active:scale-98 transition-all duration-200 cursor-pointer font-display flex items-center justify-center gap-2"
+              >
+                <ExternalLink className="w-4 h-4 text-slate-400" />
+                Acessar App
+              </a>
               <button
                 onClick={() => {
                   setTab('contact');
