@@ -188,13 +188,13 @@ export const HomeView: React.FC<HomeViewProps> = ({ setTab }) => {
                   <ExternalLink className="w-4.5 h-4.5 text-slate-400" />
                   Acessar App
                 </a>
-                <button
+                {/* <button
                   onClick={() => setTab("pricing")}
                   id="hero-cta-pricing"
                   className="px-6 py-3.5 rounded-xl bg-white border border-slate-200 text-slate-700 font-medium hover:bg-slate-50 hover:border-slate-300 active:scale-98 transition-all duration-200 cursor-pointer text-center font-display"
                 >
                   Conhecer Planos (Em Breve)
-                </button>
+                </button> */}
               </div>
 
               {/* Trust markers */}
