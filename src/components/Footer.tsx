@@ -1,6 +1,6 @@
-import React from 'react';
-import { HeartPulse, Github, Linkedin, Mail, ArrowUpRight } from 'lucide-react';
-import { TabType } from '../types';
+import React from "react";
+import { HeartPulse, Github, Linkedin, Mail, ArrowUpRight } from "lucide-react";
+import { TabType } from "../types";
 
 interface FooterProps {
   setTab: (tab: TabType) => void;
@@ -11,7 +11,7 @@ export const Footer: React.FC<FooterProps> = ({ setTab }) => {
 
   const handleLinkClick = (tab: TabType) => {
     setTab(tab);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -22,9 +22,9 @@ export const Footer: React.FC<FooterProps> = ({ setTab }) => {
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center overflow-hidden border border-slate-100 shadow-3xs">
-                <img 
-                  src="https://prime-visita.vercel.app/icons/icon-512.png" 
-                  alt="Prime Visita" 
+                <img
+                  src="https://app.primevisita.com.br/icons/icon-512.png"
+                  alt="Prime Visita"
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
                 />
@@ -34,7 +34,8 @@ export const Footer: React.FC<FooterProps> = ({ setTab }) => {
               </span>
             </div>
             <p className="text-sm text-slate-500 leading-relaxed max-w-xs">
-              A melhor plataforma para gestão inteligente e otimizada de visitas médicas e relacionamento corporativo na área da saúde.
+              A melhor plataforma para gestão inteligente e otimizada de visitas
+              médicas e relacionamento corporativo na área da saúde.
             </p>
           </div>
 
@@ -46,7 +47,7 @@ export const Footer: React.FC<FooterProps> = ({ setTab }) => {
             <ul className="space-y-2.5">
               <li>
                 <button
-                  onClick={() => handleLinkClick('home')}
+                  onClick={() => handleLinkClick("home")}
                   className="text-sm text-slate-500 hover:text-blue-600 transition-colors cursor-pointer flex items-center gap-1 group"
                 >
                   Funcionalidades
@@ -55,7 +56,7 @@ export const Footer: React.FC<FooterProps> = ({ setTab }) => {
               </li>
               <li>
                 <button
-                  onClick={() => handleLinkClick('beta')}
+                  onClick={() => handleLinkClick("beta")}
                   className="text-sm text-slate-500 hover:text-blue-600 transition-colors cursor-pointer flex items-center gap-1 group"
                 >
                   Programa Beta Privado
@@ -64,7 +65,7 @@ export const Footer: React.FC<FooterProps> = ({ setTab }) => {
               </li>
               <li>
                 <button
-                  onClick={() => handleLinkClick('pricing')}
+                  onClick={() => handleLinkClick("pricing")}
                   className="text-sm text-slate-500 hover:text-blue-600 transition-colors cursor-pointer flex items-center gap-1 group"
                 >
                   Planos e Preços
@@ -73,7 +74,7 @@ export const Footer: React.FC<FooterProps> = ({ setTab }) => {
               </li>
               <li>
                 <button
-                  onClick={() => handleLinkClick('docs')}
+                  onClick={() => handleLinkClick("docs")}
                   className="text-sm text-slate-500 hover:text-blue-600 transition-colors cursor-pointer flex items-center gap-1 group"
                 >
                   Guia do Usuário
@@ -91,7 +92,7 @@ export const Footer: React.FC<FooterProps> = ({ setTab }) => {
             <ul className="space-y-2.5">
               <li>
                 <button
-                  onClick={() => handleLinkClick('contact')}
+                  onClick={() => handleLinkClick("contact")}
                   className="text-sm text-slate-500 hover:text-blue-600 transition-colors cursor-pointer flex items-center gap-1"
                 >
                   Fale Conosco
@@ -99,18 +100,20 @@ export const Footer: React.FC<FooterProps> = ({ setTab }) => {
               </li>
               <li>
                 <button
-                  onClick={() => handleLinkClick('privacy')}
+                  onClick={() => handleLinkClick("privacy")}
                   className="text-sm text-slate-500 hover:text-blue-600 transition-colors cursor-pointer flex items-center gap-1"
                 >
-                  Privacidade <ArrowUpRight className="w-3 h-3 text-slate-400" />
+                  Privacidade{" "}
+                  <ArrowUpRight className="w-3 h-3 text-slate-400" />
                 </button>
               </li>
               <li>
                 <button
-                  onClick={() => handleLinkClick('terms')}
+                  onClick={() => handleLinkClick("terms")}
                   className="text-sm text-slate-500 hover:text-blue-600 transition-colors cursor-pointer flex items-center gap-1"
                 >
-                  Termos de Uso <ArrowUpRight className="w-3 h-3 text-slate-400" />
+                  Termos de Uso{" "}
+                  <ArrowUpRight className="w-3 h-3 text-slate-400" />
                 </button>
               </li>
             </ul>
@@ -122,7 +125,8 @@ export const Footer: React.FC<FooterProps> = ({ setTab }) => {
               Conecte-se Conosco
             </h4>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Descubra como otimizar o relacionamento com clínicas médicas e expandir sua cobertura.
+              Descubra como otimizar o relacionamento com clínicas médicas e
+              expandir sua cobertura.
             </p>
             <div className="flex items-center gap-3">
               <a
@@ -140,7 +144,7 @@ export const Footer: React.FC<FooterProps> = ({ setTab }) => {
                 <Github className="w-4 h-4" />
               </a>
               <button
-                onClick={() => handleLinkClick('contact')}
+                onClick={() => handleLinkClick("contact")}
                 className="w-9 h-9 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-blue-600 hover:border-blue-200 transition-all shadow-2xs"
               >
                 <Mail className="w-4 h-4" />

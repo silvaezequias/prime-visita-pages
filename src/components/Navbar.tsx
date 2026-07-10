@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Menu, X, HeartPulse, Sparkles, ExternalLink } from 'lucide-react';
-import { TabType } from '../types';
+import React, { useState } from "react";
+import { Menu, X, HeartPulse, Sparkles, ExternalLink } from "lucide-react";
+import { TabType } from "../types";
 
 interface NavbarProps {
   currentTab: TabType;
@@ -11,17 +11,17 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setTab }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems: { label: string; value: TabType }[] = [
-    { label: 'Início', value: 'home' },
-    { label: 'Documentação', value: 'docs' },
-    { label: 'Precificação', value: 'pricing' },
-    { label: 'Acesso Beta', value: 'beta' },
-    { label: 'Contato', value: 'contact' },
+    { label: "Início", value: "home" },
+    { label: "Documentação", value: "docs" },
+    { label: "Precificação", value: "pricing" },
+    { label: "Acesso Beta", value: "beta" },
+    { label: "Contato", value: "contact" },
   ];
 
   const handleNavClick = (tab: TabType) => {
     setTab(tab);
     setIsOpen(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -31,14 +31,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setTab }) => {
           {/* Logo and Brand */}
           <div className="flex items-center">
             <button
-              onClick={() => handleNavClick('home')}
+              onClick={() => handleNavClick("home")}
               className="flex items-center gap-2 cursor-pointer group focus:outline-hidden"
               id="nav-logo"
             >
               <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center overflow-hidden border border-slate-100 shadow-2xs group-hover:scale-105 transition-transform duration-200">
-                <img 
-                  src="https://prime-visita.vercel.app/icons/icon-512.png" 
-                  alt="Prime Visita Logo" 
+                <img
+                  src="https://app.primevisita.com.br/icons/icon-512.png"
+                  alt="Prime Visita Logo"
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
                 />
@@ -58,7 +58,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setTab }) => {
           <div className="hidden md:flex items-center space-x-1">
             {navItems.map((item) => {
               const isActive = currentTab === item.value;
-              const isBeta = item.value === 'beta';
+              const isBeta = item.value === "beta";
               return (
                 <button
                   key={item.value}
@@ -66,10 +66,10 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setTab }) => {
                   onClick={() => handleNavClick(item.value)}
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
                     isActive
-                      ? 'text-blue-600 bg-blue-50/50 font-bold'
+                      ? "text-blue-600 bg-blue-50/50 font-bold"
                       : isBeta
-                      ? 'text-blue-600 hover:bg-blue-50/30'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                        ? "text-blue-600 hover:bg-blue-50/30"
+                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                   }`}
                 >
                   {item.label}
@@ -83,7 +83,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setTab }) => {
             })}
             <div className="h-6 w-[1px] bg-slate-200 mx-3"></div>
             <a
-              href="https://prime-visita.vercel.app/"
+              href="https://app.primevisita.com.br/"
               target="_blank"
               rel="noopener noreferrer"
               className="px-4 py-2 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 text-sm font-medium transition-all duration-200 flex items-center gap-1.5 cursor-pointer shadow-3xs active:scale-[0.98]"
@@ -92,7 +92,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setTab }) => {
               Acessar App
             </a>
             <button
-              onClick={() => handleNavClick('beta')}
+              onClick={() => handleNavClick("beta")}
               id="nav-cta-demo"
               className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm font-medium transition-all duration-200 flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-[0.98]"
             >
@@ -109,7 +109,11 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setTab }) => {
               className="inline-flex items-center justify-center p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 focus:outline-hidden transition-colors"
             >
               <span className="sr-only">Abrir menu</span>
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
             </button>
           </div>
         </div>
@@ -128,8 +132,8 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setTab }) => {
                   onClick={() => handleNavClick(item.value)}
                   className={`w-full text-left block px-4 py-2.5 rounded-lg text-base font-medium transition-colors ${
                     isActive
-                      ? 'text-blue-600 bg-blue-50'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                      ? "text-blue-600 bg-blue-50"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                   }`}
                 >
                   {item.label}
@@ -138,7 +142,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setTab }) => {
             })}
             <div className="pt-4 pb-1 border-t border-slate-100 px-4 space-y-2">
               <a
-                href="https://prime-visita.vercel.app/"
+                href="https://app.primevisita.com.br/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full py-2.5 px-4 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 text-center text-base font-medium transition-colors flex items-center justify-center gap-2 shadow-xs"
@@ -147,7 +151,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setTab }) => {
                 Acessar App
               </a>
               <button
-                onClick={() => handleNavClick('beta')}
+                onClick={() => handleNavClick("beta")}
                 id="mobile-nav-cta"
                 className="w-full py-2.5 px-4 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-center text-base font-medium transition-colors flex items-center justify-center gap-2 shadow-xs"
               >
