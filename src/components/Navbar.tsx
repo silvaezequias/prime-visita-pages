@@ -150,14 +150,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setTab }) => {
                 <ExternalLink className="w-4 h-4 text-slate-400" />
                 Acessar App
               </a>
-              <button
+              {/* <button
                 onClick={() => handleNavClick("beta")}
                 id="mobile-nav-cta"
                 className="w-full py-2.5 px-4 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-center text-base font-medium transition-colors flex items-center justify-center gap-2 shadow-xs"
               >
                 <Sparkles className="w-4 h-4" />
                 Garantir Vaga Beta
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
