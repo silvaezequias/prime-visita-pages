@@ -1,0 +1,6 @@
+{
+  "name": "Prime Visita",
+  "description": "Plataforma de gestão de visitação médica para empresas, clínicas e parceiros.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
