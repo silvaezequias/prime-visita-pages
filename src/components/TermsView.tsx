@@ -182,11 +182,11 @@ export const TermsView: React.FC<TermsViewProps> = ({ setTab }) => {
           {/* Section 5 */}
           <section id="sandbox" className="scroll-mt-6 space-y-4">
             <h2 className="font-display text-xl font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-2">
-              <span className="text-blue-600">5.</span> Condições do Programa Sandbox (Ambiente Beta)
+              <span className="text-blue-600">5.</span> Condições do Programa Sandbox
             </h2>
             <div className="text-slate-600 text-xs sm:text-sm leading-relaxed space-y-3">
               <p>
-                O Programa de Sandbox e os testes realizados no ambiente "Acesso Beta" constituem uma cortesia técnica não-onerosa disponibilizada no período de pré-lançamento do sistema.
+                O Programa de Sandbox e os testes realizados no ambiente de demonstração constituem uma cortesia técnica não-onerosa disponibilizada durante o período de testes do sistema.
               </p>
               <p>
                 Os dados inseridos na Sandbox possuem caráter estritamente fictício. O Prime Visita reserva-se o direito de resetar periodicamente os bancos de dados do ambiente Sandbox, alterar APIs temporárias e descontinuar chaves de teste sem aviso prévio. Nenhuma indenização por dados perdidos será devida em relação à Sandbox de testes.

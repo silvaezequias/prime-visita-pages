@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Menu, X, HeartPulse, Sparkles, ExternalLink } from "lucide-react";
+import { Menu, X, ExternalLink } from "lucide-react";
 import { TabType } from "../types";
 
 interface NavbarProps {
@@ -13,8 +13,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setTab }) => {
   const navItems: { label: string; value: TabType }[] = [
     { label: "Início", value: "home" },
     { label: "Documentação", value: "docs" },
-    { label: "Precificação", value: "pricing" },
-    { label: "Acesso Beta", value: "beta" },
+    { label: "Planos", value: "pricing" },
     { label: "Contato", value: "contact" },
   ];
 
@@ -58,7 +57,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setTab }) => {
           <div className="hidden md:flex items-center space-x-1">
             {navItems.map((item) => {
               const isActive = currentTab === item.value;
-              const isBeta = item.value === "beta";
               return (
                 <button
                   key={item.value}
@@ -67,17 +65,10 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setTab }) => {
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
                     isActive
                       ? "text-blue-600 bg-blue-50/50 font-bold"
-                      : isBeta
-                        ? "text-blue-600 hover:bg-blue-50/30"
-                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                   }`}
                 >
                   {item.label}
-                  {isBeta && (
-                    <span className="px-1.5 py-0.2 bg-blue-500 text-white text-[8px] font-mono font-bold rounded-md animate-pulse">
-                      Novo
-                    </span>
-                  )}
                 </button>
               );
             })}
@@ -92,12 +83,11 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setTab }) => {
               Acessar App
             </a>
             <button
-              onClick={() => handleNavClick("beta")}
+              onClick={() => handleNavClick("pricing")}
               id="nav-cta-demo"
               className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm font-medium transition-all duration-200 flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-[0.98]"
             >
-              <Sparkles className="w-3.5 h-3.5" />
-              Garantir Vaga Beta
+              Ver Planos
             </button>
           </div>
 
@@ -150,14 +140,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setTab }) => {
                 <ExternalLink className="w-4 h-4 text-slate-400" />
                 Acessar App
               </a>
-              {/* <button
-                onClick={() => handleNavClick("beta")}
-                id="mobile-nav-cta"
-                className="w-full py-2.5 px-4 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-center text-base font-medium transition-colors flex items-center justify-center gap-2 shadow-xs"
-              >
-                <Sparkles className="w-4 h-4" />
-                Garantir Vaga Beta
-              </button> */}
             </div>
           </div>
         </div>

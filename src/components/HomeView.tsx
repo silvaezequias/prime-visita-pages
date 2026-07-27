@@ -167,16 +167,17 @@ export const HomeView: React.FC<HomeViewProps> = ({ setTab }) => {
                 O <strong>Prime Visita</strong> é um ecossistema inteligente em
                 desenvolvimento projetado para organizar médicos, otimizar
                 roteiros e dar inteligência a representantes de campo.
-                Cadastre-se na Beta Privada para testar hoje mesmo.
+                Conheça a plataforma completa e comece a organizar suas
+                visitas hoje mesmo.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 pt-4">
                 <button
-                  onClick={() => setTab("beta")}
-                  id="hero-cta-beta"
+                  onClick={() => setTab("pricing")}
+                  id="hero-cta-pricing"
                   className="px-6 py-3.5 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 active:scale-98 transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-blue-100 font-display"
                 >
-                  Acessar Beta Privada
+                  Ver Planos
                   <ArrowRight className="w-4.5 h-4.5" />
                 </button>
                 <a
@@ -188,13 +189,6 @@ export const HomeView: React.FC<HomeViewProps> = ({ setTab }) => {
                   <ExternalLink className="w-4.5 h-4.5 text-slate-400" />
                   Acessar App
                 </a>
-                {/* <button
-                  onClick={() => setTab("pricing")}
-                  id="hero-cta-pricing"
-                  className="px-6 py-3.5 rounded-xl bg-white border border-slate-200 text-slate-700 font-medium hover:bg-slate-50 hover:border-slate-300 active:scale-98 transition-all duration-200 cursor-pointer text-center font-display"
-                >
-                  Conhecer Planos (Em Breve)
-                </button> */}
               </div>
 
               {/* Trust markers */}
@@ -205,7 +199,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ setTab }) => {
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Check className="w-4 h-4 text-blue-500" />
-                  Sandbox Beta disponível
+                  Suporte técnico especializado
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Check className="w-4 h-4 text-blue-500" />
@@ -685,18 +679,17 @@ export const HomeView: React.FC<HomeViewProps> = ({ setTab }) => {
             <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
               Assuma o controle da sua operação, acabe com as planilhas
               dispersas e esteja pronto para o lançamento do Prime Visita.
-              Garanta sua vaga no programa Beta Privado.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 pt-4 justify-center">
               <button
                 onClick={() => {
-                  setTab("beta");
+                  setTab("pricing");
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
                 id="cta-bottom-demo"
                 className="px-6 py-3.5 rounded-xl bg-blue-500 text-slate-950 font-bold hover:bg-blue-400 active:scale-98 transition-all duration-200 cursor-pointer shadow-lg shadow-blue-500/10 font-display"
               >
-                Garantir Vaga no Beta Privado
+                Ver Planos
               </button>
               <a
                 href="https://app.primevisita.com.br/"

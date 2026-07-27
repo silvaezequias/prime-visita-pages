@@ -56,15 +56,6 @@ export const Footer: React.FC<FooterProps> = ({ setTab }) => {
               </li>
               <li>
                 <button
-                  onClick={() => handleLinkClick("beta")}
-                  className="text-sm text-slate-500 hover:text-blue-600 transition-colors cursor-pointer flex items-center gap-1 group"
-                >
-                  Programa Beta Privado
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-600 opacity-0 group-hover:opacity-100 transition-opacity ml-1"></span>
-                </button>
-              </li>
-              <li>
-                <button
                   onClick={() => handleLinkClick("pricing")}
                   className="text-sm text-slate-500 hover:text-blue-600 transition-colors cursor-pointer flex items-center gap-1 group"
                 >

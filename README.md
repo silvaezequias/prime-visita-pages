@@ -36,10 +36,7 @@ A aplicação foi rigorosamente adaptada para proporcionar uma experiência de n
    - Apresentação visual da arquitetura de integração offline, sincronização silenciosa via Service Workers e SDKs para dispositivos móveis.
 3. **PricingView (Simulador de Custos Comerciais)**:
    - Exibição de planos mensais e anuais sob medida, com conversor dinâmico e integração transparente de termos de checkout.
-4. **BetaView (Portal de Solicitação de Convites)**:
-   - Interface segura para empresas requisitarem acesso à Sandbox.
-   - Fornece um protocolo exclusivo (`PV-WLT-XXXX`) e explica detalhadamente os critérios de análise cadastral de fila de espera.
-5. **Políticas Jurídicas Completas & Conformidade**:
+4. **Políticas Jurídicas Completas & Conformidade**:
    - **PrivacyView (Política de Privacidade LGPD)**: Regras transparentes dividindo responsabilidades entre Controladora (Sua Empresa) e Operadora (Prime Visita) conforme o Artigo 18 da Lei Geral de Proteção de Dados (LGPD).
    - **TermsView (Termos de Uso e Pagamentos)**: Regula as assinaturas recorrentes, faturamento automático criptografado no padrão PCI-DSS, reembolso por direito de arrependimento (Art. 49 do CDC) e foro central eleito.
 
@@ -71,7 +68,6 @@ A aplicação foi rigorosamente adaptada para proporcionar uma experiência de n
       ├── HomeView.tsx      # Landing page principal, estatísticas e simulador interativo de visitas
       ├── DocsView.tsx      # Guia de documentação de integrações e APIs
       ├── PricingView.tsx   # Exibição de planos comerciais e botões de contratação
-      ├── BetaView.tsx      # Formulário de entrada na lista de espera do programa privado
       ├── CheckoutView.tsx  # Simulador de checkout de assinaturas com pagamento seguro
       ├── ContactView.tsx   # Canal de suporte direto e ouvidoria
       ├── PrivacyView.tsx   # Portal jurídico completo de privacidade de dados (LGPD)

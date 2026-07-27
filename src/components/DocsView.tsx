@@ -75,12 +75,12 @@ export const DocsView: React.FC<DocsViewProps> = ({ setTab }) => {
           {setTab && (
             <button
               onClick={() => {
-                setTab('beta');
+                setTab('contact');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
               className="px-6 py-3 rounded-xl bg-blue-600 text-white font-bold text-sm hover:bg-blue-700 transition-colors shadow-md shadow-blue-100 cursor-pointer"
             >
-              Garantir Vaga na Beta Privada
+              Fale Conosco
             </button>
           )}
         </div>

@@ -1,4 +1,4 @@
-export type TabType = 'home' | 'docs' | 'pricing' | 'contact' | 'checkout' | 'beta' | 'privacy' | 'terms';
+export type TabType = 'home' | 'docs' | 'pricing' | 'contact' | 'checkout' | 'privacy' | 'terms';
 
 export interface Feature {
   id: string;
