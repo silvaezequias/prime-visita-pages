@@ -101,9 +101,13 @@ npm run lint
 ```
 
 ### 5. Compilação para Produção
-Crie a build estática otimizada para implantação em containers de nuvem:
+Crie a build estática otimizada para implantação em qualquer servidor de arquivos estáticos:
 ```bash
 npm run build
+```
+O resultado é gerado na pasta `dist/` (export estático do Next.js, configurado em `next.config.ts`). Para pré-visualizar localmente o conteúdo gerado:
+```bash
+npm start
 ```
 
 ---
