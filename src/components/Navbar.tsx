@@ -57,16 +57,33 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setTab }) => {
           <div className="hidden md:flex items-center space-x-1">
             {navItems.map((item) => {
               const isActive = currentTab === item.value;
+              const itemClassName = `px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
+                isActive
+                  ? "text-blue-600 bg-blue-50/50 font-bold"
+                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+              }`;
+
+              if (item.value === "docs") {
+                return (
+                  <a
+                    key={item.value}
+                    id={`nav-item-${item.value}`}
+                    href="https://docs.primevisita.com.br"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={itemClassName}
+                  >
+                    {item.label}
+                  </a>
+                );
+              }
+
               return (
                 <button
                   key={item.value}
                   id={`nav-item-${item.value}`}
                   onClick={() => handleNavClick(item.value)}
-                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
-                    isActive
-                      ? "text-blue-600 bg-blue-50/50 font-bold"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-                  }`}
+                  className={itemClassName}
                 >
                   {item.label}
                 </button>
@@ -115,16 +132,34 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setTab }) => {
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {navItems.map((item) => {
               const isActive = currentTab === item.value;
+              const itemClassName = `w-full text-left block px-4 py-2.5 rounded-lg text-base font-medium transition-colors ${
+                isActive
+                  ? "text-blue-600 bg-blue-50"
+                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+              }`;
+
+              if (item.value === "docs") {
+                return (
+                  <a
+                    key={item.value}
+                    id={`mobile-nav-item-${item.value}`}
+                    href="https://docs.primevisita.com.br"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setIsOpen(false)}
+                    className={itemClassName}
+                  >
+                    {item.label}
+                  </a>
+                );
+              }
+
               return (
                 <button
                   key={item.value}
                   id={`mobile-nav-item-${item.value}`}
                   onClick={() => handleNavClick(item.value)}
-                  className={`w-full text-left block px-4 py-2.5 rounded-lg text-base font-medium transition-colors ${
-                    isActive
-                      ? "text-blue-600 bg-blue-50"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-                  }`}
+                  className={itemClassName}
                 >
                   {item.label}
                 </button>

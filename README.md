@@ -45,7 +45,7 @@ A aplicação foi rigorosamente adaptada para proporcionar uma experiência de n
 ## 🛠️ Tecnologias e Dependências
 
 - **Runtime**: Node.js & TypeScript
-- **Bundler & Dev Server**: Vite & PostCSS
+- **Framework & Dev Server**: Next.js (App Router) & PostCSS
 - **Framework Visual**: React 18+
 - **Estilização**: Tailwind CSS (Utility-First)
 - **Biblioteca de Ícones**: `lucide-react` (Ícones vetoriais modernos e consistentes)
