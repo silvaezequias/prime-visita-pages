@@ -1,4 +1,7 @@
+'use client';
+
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import {
   ArrowRight,
@@ -14,13 +17,8 @@ import {
   Star,
   ExternalLink,
 } from "lucide-react";
-import { TabType } from "../types";
 import { features, faqList } from "../data";
 import { renderIcon } from "./IconHelper";
-
-interface HomeViewProps {
-  setTab: (tab: TabType) => void;
-}
 
 // Simple Mock Data for the Dashboard Simulator
 interface SimulatorVisit {
@@ -32,7 +30,8 @@ interface SimulatorVisit {
   priority: "A" | "B" | "C";
 }
 
-export const HomeView: React.FC<HomeViewProps> = ({ setTab }) => {
+export const HomeView: React.FC = () => {
+  const router = useRouter();
   // Simulator State
   const [simulatorVisits, setSimulatorVisits] = useState<SimulatorVisit[]>([
     {
@@ -173,7 +172,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ setTab }) => {
 
               <div className="flex flex-col sm:flex-row gap-3 pt-4">
                 <button
-                  onClick={() => setTab("pricing")}
+                  onClick={() => router.push("/pricing")}
                   id="hero-cta-pricing"
                   className="px-6 py-3.5 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 active:scale-98 transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-blue-100 font-display"
                 >
@@ -683,7 +682,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ setTab }) => {
             <div className="flex flex-col sm:flex-row gap-3 pt-4 justify-center">
               <button
                 onClick={() => {
-                  setTab("pricing");
+                  router.push("/pricing");
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
                 id="cta-bottom-demo"
@@ -702,7 +701,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ setTab }) => {
               </a>
               <button
                 onClick={() => {
-                  setTab("contact");
+                  router.push("/contact");
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
                 id="cta-bottom-plans"

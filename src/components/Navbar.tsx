@@ -1,27 +1,21 @@
+'use client';
+
 import React, { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X, ExternalLink } from "lucide-react";
-import { TabType } from "../types";
 
-interface NavbarProps {
-  currentTab: TabType;
-  setTab: (tab: TabType) => void;
-}
+const navItems: { label: string; href: string }[] = [
+  { label: "Início", href: "/" },
+  { label: "Planos", href: "/pricing" },
+  { label: "Contato", href: "/contact" },
+];
 
-export const Navbar: React.FC<NavbarProps> = ({ currentTab, setTab }) => {
+export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
 
-  const navItems: { label: string; value: TabType }[] = [
-    { label: "Início", value: "home" },
-    { label: "Documentação", value: "docs" },
-    { label: "Planos", value: "pricing" },
-    { label: "Contato", value: "contact" },
-  ];
-
-  const handleNavClick = (tab: TabType) => {
-    setTab(tab);
-    setIsOpen(false);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  const closeMenu = () => setIsOpen(false);
 
   return (
     <nav className="sticky top-0 z-50 bg-white/85 backdrop-blur-md border-b border-slate-100 transition-all duration-200">
@@ -29,8 +23,8 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setTab }) => {
         <div className="flex justify-between h-16">
           {/* Logo and Brand */}
           <div className="flex items-center">
-            <button
-              onClick={() => handleNavClick("home")}
+            <Link
+              href="/"
               className="flex items-center gap-2 cursor-pointer group focus:outline-hidden"
               id="nav-logo"
             >
@@ -50,45 +44,38 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setTab }) => {
                   Gestão de Visitas
                 </span>
               </div>
-            </button>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
             {navItems.map((item) => {
-              const isActive = currentTab === item.value;
-              const itemClassName = `px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
-                isActive
-                  ? "text-blue-600 bg-blue-50/50 font-bold"
-                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-              }`;
-
-              if (item.value === "docs") {
-                return (
-                  <a
-                    key={item.value}
-                    id={`nav-item-${item.value}`}
-                    href="https://docs.primevisita.com.br"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={itemClassName}
-                  >
-                    {item.label}
-                  </a>
-                );
-              }
-
+              const isActive = pathname === item.href;
               return (
-                <button
-                  key={item.value}
-                  id={`nav-item-${item.value}`}
-                  onClick={() => handleNavClick(item.value)}
-                  className={itemClassName}
+                <Link
+                  key={item.href}
+                  id={`nav-item-${item.href}`}
+                  href={item.href}
+                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
+                    isActive
+                      ? "text-blue-600 bg-blue-50/50 font-bold"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                  }`}
                 >
                   {item.label}
-                </button>
+                </Link>
               );
             })}
+            <a
+              key="docs"
+              id="nav-item-docs"
+              href="https://docs.primevisita.com.br"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer flex items-center gap-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+            >
+              Documentação
+            </a>
             <div className="h-6 w-[1px] bg-slate-200 mx-3"></div>
             <a
               href="https://app.primevisita.com.br/"
@@ -99,13 +86,13 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setTab }) => {
               <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
               Acessar App
             </a>
-            <button
-              onClick={() => handleNavClick("pricing")}
+            <Link
+              href="/pricing"
               id="nav-cta-demo"
               className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm font-medium transition-all duration-200 flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-[0.98]"
             >
               Ver Planos
-            </button>
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -131,40 +118,33 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setTab }) => {
         <div className="md:hidden border-b border-slate-100 bg-white/95 backdrop-blur-md absolute top-16 left-0 right-0 py-3 shadow-lg transition-all duration-200">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {navItems.map((item) => {
-              const isActive = currentTab === item.value;
-              const itemClassName = `w-full text-left block px-4 py-2.5 rounded-lg text-base font-medium transition-colors ${
-                isActive
-                  ? "text-blue-600 bg-blue-50"
-                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-              }`;
-
-              if (item.value === "docs") {
-                return (
-                  <a
-                    key={item.value}
-                    id={`mobile-nav-item-${item.value}`}
-                    href="https://docs.primevisita.com.br"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => setIsOpen(false)}
-                    className={itemClassName}
-                  >
-                    {item.label}
-                  </a>
-                );
-              }
-
+              const isActive = pathname === item.href;
               return (
-                <button
-                  key={item.value}
-                  id={`mobile-nav-item-${item.value}`}
-                  onClick={() => handleNavClick(item.value)}
-                  className={itemClassName}
+                <Link
+                  key={item.href}
+                  id={`mobile-nav-item-${item.href}`}
+                  href={item.href}
+                  onClick={closeMenu}
+                  className={`w-full text-left block px-4 py-2.5 rounded-lg text-base font-medium transition-colors ${
+                    isActive
+                      ? "text-blue-600 bg-blue-50"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                  }`}
                 >
                   {item.label}
-                </button>
+                </Link>
               );
             })}
+            <a
+              id="mobile-nav-item-docs"
+              href="https://docs.primevisita.com.br"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={closeMenu}
+              className="w-full text-left block px-4 py-2.5 rounded-lg text-base font-medium transition-colors text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+            >
+              Documentação
+            </a>
             <div className="pt-4 pb-1 border-t border-slate-100 px-4 space-y-2">
               <a
                 href="https://app.primevisita.com.br/"

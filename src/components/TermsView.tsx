@@ -1,13 +1,12 @@
+'use client';
+
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion } from 'motion/react';
 import { FileText, Scale, ChevronRight, AlertTriangle, ShieldCheck, CreditCard, RefreshCw } from 'lucide-react';
-import { TabType } from '../types';
 
-interface TermsViewProps {
-  setTab: (tab: TabType) => void;
-}
-
-export const TermsView: React.FC<TermsViewProps> = ({ setTab }) => {
+export const TermsView: React.FC = () => {
+  const router = useRouter();
   const [activeSection, setActiveSection] = useState<string>('acceptance');
 
   const sections = [
@@ -74,7 +73,7 @@ export const TermsView: React.FC<TermsViewProps> = ({ setTab }) => {
           <div className="pt-4 border-t border-slate-200 mt-4 text-center">
             <button
               onClick={() => {
-                setTab('privacy');
+                router.push('/privacy');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
               className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors cursor-pointer"

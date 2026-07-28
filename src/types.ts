@@ -1,5 +1,3 @@
-export type TabType = 'home' | 'docs' | 'pricing' | 'contact' | 'checkout' | 'privacy' | 'terms';
-
 export interface Feature {
   id: string;
   icon: string;

@@ -1,18 +1,9 @@
 import React from "react";
-import { HeartPulse, Github, Linkedin, Mail, ArrowUpRight } from "lucide-react";
-import { TabType } from "../types";
+import Link from "next/link";
+import { Github, Linkedin, Mail, ArrowUpRight } from "lucide-react";
 
-interface FooterProps {
-  setTab: (tab: TabType) => void;
-}
-
-export const Footer: React.FC<FooterProps> = ({ setTab }) => {
+export const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
-
-  const handleLinkClick = (tab: TabType) => {
-    setTab(tab);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
 
   return (
     <footer className="bg-slate-50 border-t border-slate-100 mt-auto">
@@ -46,31 +37,31 @@ export const Footer: React.FC<FooterProps> = ({ setTab }) => {
             </h4>
             <ul className="space-y-2.5">
               <li>
-                <button
-                  onClick={() => handleLinkClick("home")}
+                <Link
+                  href="/"
                   className="text-sm text-slate-500 hover:text-blue-600 transition-colors cursor-pointer flex items-center gap-1 group"
                 >
                   Funcionalidades
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-600 opacity-0 group-hover:opacity-100 transition-opacity ml-1"></span>
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  onClick={() => handleLinkClick("pricing")}
+                <Link
+                  href="/pricing"
                   className="text-sm text-slate-500 hover:text-blue-600 transition-colors cursor-pointer flex items-center gap-1 group"
                 >
                   Planos e Preços
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-600 opacity-0 group-hover:opacity-100 transition-opacity ml-1"></span>
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  onClick={() => handleLinkClick("docs")}
+                <Link
+                  href="/docs"
                   className="text-sm text-slate-500 hover:text-blue-600 transition-colors cursor-pointer flex items-center gap-1 group"
                 >
                   Guia do Usuário
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-600 opacity-0 group-hover:opacity-100 transition-opacity ml-1"></span>
-                </button>
+                </Link>
               </li>
             </ul>
           </div>
@@ -82,30 +73,30 @@ export const Footer: React.FC<FooterProps> = ({ setTab }) => {
             </h4>
             <ul className="space-y-2.5">
               <li>
-                <button
-                  onClick={() => handleLinkClick("contact")}
+                <Link
+                  href="/contact"
                   className="text-sm text-slate-500 hover:text-blue-600 transition-colors cursor-pointer flex items-center gap-1"
                 >
                   Fale Conosco
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  onClick={() => handleLinkClick("privacy")}
+                <Link
+                  href="/privacy"
                   className="text-sm text-slate-500 hover:text-blue-600 transition-colors cursor-pointer flex items-center gap-1"
                 >
                   Privacidade{" "}
                   <ArrowUpRight className="w-3 h-3 text-slate-400" />
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  onClick={() => handleLinkClick("terms")}
+                <Link
+                  href="/terms"
                   className="text-sm text-slate-500 hover:text-blue-600 transition-colors cursor-pointer flex items-center gap-1"
                 >
                   Termos de Uso{" "}
                   <ArrowUpRight className="w-3 h-3 text-slate-400" />
-                </button>
+                </Link>
               </li>
             </ul>
           </div>
@@ -134,12 +125,12 @@ export const Footer: React.FC<FooterProps> = ({ setTab }) => {
               >
                 <Github className="w-4 h-4" />
               </a>
-              <button
-                onClick={() => handleLinkClick("contact")}
+              <Link
+                href="/contact"
                 className="w-9 h-9 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-blue-600 hover:border-blue-200 transition-all shadow-2xs"
               >
                 <Mail className="w-4 h-4" />
-              </button>
+              </Link>
             </div>
           </div>
         </div>

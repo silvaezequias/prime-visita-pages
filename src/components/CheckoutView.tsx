@@ -1,39 +1,36 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  Check, 
-  CreditCard, 
-  QrCode, 
-  Barcode, 
-  ArrowLeft, 
-  Lock, 
-  ShieldCheck, 
-  Copy, 
-  CheckCircle2, 
-  Ticket, 
+import {
+  Check,
+  CreditCard,
+  QrCode,
+  Barcode,
+  ArrowLeft,
+  Lock,
+  ShieldCheck,
+  Copy,
+  CheckCircle2,
+  Ticket,
   Loader2,
   Info,
   ChevronRight
 } from 'lucide-react';
 import { pricingPlans } from '../data';
-import { TabType } from '../types';
-
-interface CheckoutViewProps {
-  setTab: (tab: TabType) => void;
-  selectedPlanName: string;
-  selectedBillingPeriod: 'monthly' | 'yearly';
-}
 
 type PaymentMethod = 'credit_card' | 'pix' | 'boleto';
 
-export const CheckoutView: React.FC<CheckoutViewProps> = ({ 
-  setTab, 
-  selectedPlanName, 
-  selectedBillingPeriod 
-}) => {
+export const CheckoutView: React.FC = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const selectedPlanName = searchParams.get('plan') || 'Profissional';
+  const selectedBillingPeriod: 'monthly' | 'yearly' = searchParams.get('billing') === 'monthly' ? 'monthly' : 'yearly';
+
   // Plan & Billing state
-  const [planName, setPlanName] = useState<string>(selectedPlanName || 'Profissional');
-  const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>(selectedBillingPeriod || 'yearly');
+  const [planName, setPlanName] = useState<string>(selectedPlanName);
+  const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>(selectedBillingPeriod);
   const [extraReps, setExtraReps] = useState<number>(0);
   
   // Payment states
@@ -290,13 +287,13 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
 
         <div className="pt-4 flex flex-col sm:flex-row justify-center gap-4 max-w-md mx-auto">
           <button
-            onClick={() => setTab('home')}
+            onClick={() => router.push('/')}
             className="px-6 py-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
           >
             Voltar para a Home
           </button>
           <button
-            onClick={() => setTab('docs')}
+            onClick={() => router.push('/docs')}
             className="px-6 py-3 rounded-xl bg-blue-600 text-white text-xs font-bold font-display hover:bg-blue-700 active:scale-98 transition-all cursor-pointer shadow-md shadow-blue-100"
           >
             Acessar Manual do Usuário
@@ -312,7 +309,7 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
       {/* Return link */}
       <div className="text-left">
         <button
-          onClick={() => setTab('pricing')}
+          onClick={() => router.push('/pricing')}
           className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-slate-500 hover:text-blue-600 transition-colors cursor-pointer group"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />

@@ -1,16 +1,15 @@
+'use client';
+
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
+import {
   Search, BookOpen, ChevronRight, FileText, Check, Copy, HelpCircle, AlertCircle, Lock, Code, Sparkles
 } from 'lucide-react';
 import { docSections } from '../data';
-import { DocSection, TabType } from '../types';
 
-interface DocsViewProps {
-  setTab?: (tab: TabType) => void;
-}
-
-export const DocsView: React.FC<DocsViewProps> = ({ setTab }) => {
+export const DocsView: React.FC = () => {
+  const router = useRouter();
   const [showDraft, setShowDraft] = useState<boolean>(false);
   const [activeSectionId, setActiveSectionId] = useState<string>(docSections[0].id);
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -72,17 +71,15 @@ export const DocsView: React.FC<DocsViewProps> = ({ setTab }) => {
         </div>
 
         <div className="flex justify-center pt-4">
-          {setTab && (
-            <button
-              onClick={() => {
-                setTab('contact');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className="px-6 py-3 rounded-xl bg-blue-600 text-white font-bold text-sm hover:bg-blue-700 transition-colors shadow-md shadow-blue-100 cursor-pointer"
-            >
-              Fale Conosco
-            </button>
-          )}
+          <button
+            onClick={() => {
+              router.push('/contact');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="px-6 py-3 rounded-xl bg-blue-600 text-white font-bold text-sm hover:bg-blue-700 transition-colors shadow-md shadow-blue-100 cursor-pointer"
+          >
+            Fale Conosco
+          </button>
         </div>
       </div>
     );

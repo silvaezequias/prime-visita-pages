@@ -55,15 +55,24 @@ A aplicação foi rigorosamente adaptada para proporcionar uma experiência de n
 
 ## 📁 Estrutura de Pastas e Arquivos
 
+Cada página vive em sua própria rota do App Router, acessível diretamente pela URL (`/pricing`, `/contact`, `/checkout`, `/privacy`, `/terms`, `/docs`):
+
 ```bash
 /src
-  ├── App.tsx               # Orquestrador central de abas e estado global de navegação
-  ├── main.tsx              # Ponto de entrada de renderização do React e DOM
-  ├── index.css             # Importações globais do Tailwind CSS e definições de fontes
   ├── types.ts              # Declarações globais de interfaces de dados e tipos compartilhados
   ├── data.ts               # Armazenamento de dados estáticos para FAQs e listas de recursos
+  ├── app/                  # Rotas do Next.js App Router
+  │   ├── layout.tsx        # Layout raiz (metadata + AppShell)
+  │   ├── page.tsx          # Rota "/" (Home)
+  │   ├── pricing/page.tsx  # Rota "/pricing"
+  │   ├── contact/page.tsx  # Rota "/contact"
+  │   ├── checkout/page.tsx # Rota "/checkout" (lê ?plan= e ?billing= da query string)
+  │   ├── privacy/page.tsx  # Rota "/privacy"
+  │   ├── terms/page.tsx    # Rota "/terms"
+  │   └── docs/page.tsx     # Rota "/docs"
   └── components/           # Componentes modulares reutilizáveis
-      ├── Navbar.tsx        # Menu superior responsivo com hambúrguer móvel e botões de acesso
+      ├── AppShell.tsx      # Navbar + Footer + transição de página, compartilhado por todas as rotas
+      ├── Navbar.tsx        # Menu superior responsivo com hambúrguer móvel e navegação por rota
       ├── Footer.tsx        # Rodapé corporativo com links legais de navegação rápida
       ├── HomeView.tsx      # Landing page principal, estatísticas e simulador interativo de visitas
       ├── DocsView.tsx      # Guia de documentação de integrações e APIs

@@ -1,12 +1,9 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion } from 'motion/react';
 import { Check, Info, Sparkles, Building2, Loader2, AlertTriangle, RefreshCw, MessageCircle, Users } from 'lucide-react';
-import { TabType } from '../types';
-
-interface PricingViewProps {
-  setTab: (tab: TabType) => void;
-  onSelectPlan?: (planName: string, billingPeriod: 'monthly' | 'yearly') => void;
-}
 
 interface ApiPlanFeature {
   key: string;
@@ -41,7 +38,8 @@ interface ApiPlan {
 // ver src/app/api/plans/route.ts no projeto prime-visita.
 const PLANS_API_URL = 'https://app.primevisita.com.br/api/plans';
 
-export const PricingView: React.FC<PricingViewProps> = ({ setTab, onSelectPlan }) => {
+export const PricingView: React.FC = () => {
+  const router = useRouter();
   const [plans, setPlans] = useState<ApiPlan[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -66,11 +64,7 @@ export const PricingView: React.FC<PricingViewProps> = ({ setTab, onSelectPlan }
 
   const handleCtaClick = (plan: ApiPlan) => {
     const period = plan.billingPeriod === 'YEARLY' ? 'yearly' : 'monthly';
-    if (onSelectPlan) {
-      onSelectPlan(plan.name, period);
-    } else {
-      setTab('contact');
-    }
+    router.push(`/checkout?plan=${encodeURIComponent(plan.name)}&billing=${period}`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -322,7 +316,7 @@ export const PricingView: React.FC<PricingViewProps> = ({ setTab, onSelectPlan }
 
             <button
               onClick={() => {
-                setTab('contact');
+                router.push('/contact');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
               id="pricing-cta-contact"

@@ -1,13 +1,12 @@
+'use client';
+
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion } from 'motion/react';
 import { Shield, Lock, FileText, Check, Calendar, AlertCircle, Eye, ChevronRight } from 'lucide-react';
-import { TabType } from '../types';
 
-interface PrivacyViewProps {
-  setTab: (tab: TabType) => void;
-}
-
-export const PrivacyView: React.FC<PrivacyViewProps> = ({ setTab }) => {
+export const PrivacyView: React.FC = () => {
+  const router = useRouter();
   const [activeSection, setActiveSection] = useState<string>('intro');
 
   const sections = [
@@ -74,7 +73,7 @@ export const PrivacyView: React.FC<PrivacyViewProps> = ({ setTab }) => {
           <div className="pt-4 border-t border-slate-200 mt-4 text-center">
             <button
               onClick={() => {
-                setTab('terms');
+                router.push('/terms');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
               className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors cursor-pointer"
