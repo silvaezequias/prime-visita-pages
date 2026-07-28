@@ -6,16 +6,6 @@ export interface Feature {
   badge?: string;
 }
 
-export interface PricingPlan {
-  name: string;
-  priceMonthly: number;
-  priceYearly: number;
-  description: string;
-  features: string[];
-  isPopular: boolean;
-  ctaText: string;
-}
-
 export interface DocSection {
   id: string;
   title: string;

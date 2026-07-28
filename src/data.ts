@@ -1,4 +1,4 @@
-import { Feature, PricingPlan, DocSection, FAQItem } from './types';
+import { Feature, DocSection, FAQItem } from './types';
 
 export const features: Feature[] = [
   {
@@ -42,59 +42,6 @@ export const features: Feature[] = [
     title: 'Estrutura Multi-Tenant',
     description: 'Plataforma preparada para múltiplas empresas ou filiais, garantindo isolamento total de dados e segurança de nível corporativo.',
     badge: 'Segurança'
-  }
-];
-
-export const pricingPlans: PricingPlan[] = [
-  {
-    name: 'Iniciante',
-    priceMonthly: 149,
-    priceYearly: 119,
-    description: 'Ideal para representantes autônomos ou consultórios de pequeno porte.',
-    features: [
-      'Até 3 usuários/representantes',
-      'Cadastro de até 200 médicos',
-      'Agenda e calendário básico',
-      'Registro simples de visitas',
-      'Suporte via e-mail comercial',
-      'Acesso via Web e celular (PWA)'
-    ],
-    isPopular: false,
-    ctaText: 'Começar Teste Grátis'
-  },
-  {
-    name: 'Profissional',
-    priceMonthly: 399,
-    priceYearly: 319,
-    description: 'Para equipes em crescimento que precisam otimizar e acompanhar visitas em tempo real.',
-    features: [
-      'Até 15 usuários/representantes',
-      'Cadastro ilimitado de médicos',
-      'Agenda inteligente com lembretes',
-      'Dashboard completo de indicadores',
-      'Categorização por prioridade',
-      'Exportação de dados para Excel/PDF',
-      'Suporte prioritário via WhatsApp'
-    ],
-    isPopular: true,
-    ctaText: 'Contratar Plano'
-  },
-  {
-    name: 'Corporativo',
-    priceMonthly: 999,
-    priceYearly: 799,
-    description: 'Para grandes redes ou farmacêuticas que exigem customização avançada e controle total.',
-    features: [
-      'Usuários ilimitados',
-      'Isolamento total de base (Subdomínio)',
-      'Suporte Multi-tenant avançado',
-      'Integrações personalizadas de API',
-      'Auditoria completa de logs de acesso',
-      'Gerente de conta dedicado',
-      'SLA garantido de 99.9%'
-    ],
-    isPopular: false,
-    ctaText: 'Fale Conosco'
   }
 ];
 

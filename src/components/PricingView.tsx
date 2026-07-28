@@ -1,66 +1,23 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'motion/react';
-import { Check, Info, Sparkles, Building2, Loader2, AlertTriangle, RefreshCw, MessageCircle, Users } from 'lucide-react';
+import { Check, X, Info, Sparkles, Building2, Loader2, AlertTriangle, RefreshCw, MessageCircle, Users } from 'lucide-react';
+import { usePlans, getEmployeeLimitLabel, type ApiPlan, type ApiPlanFeature } from '../lib/plans';
 
-interface ApiPlanFeature {
-  key: string;
-  label: string;
-}
-
-interface ApiPlanUserLimit {
-  role: string;
-  label: string;
-  max: number | null;
-}
-
-interface ApiPlanLimits {
-  users?: ApiPlanUserLimit[];
-  appointmentsPerWeek?: number | null;
-}
-
-interface ApiPlan {
-  id: string;
-  name: string;
-  slug: string;
-  description: string | null;
-  priceCents: number;
-  price: string;
-  billingPeriod: string;
-  features: ApiPlanFeature[];
-  featured?: boolean;
-  limits?: ApiPlanLimits;
-}
-
-// Rota pública do Prime Visita (app real) que lista os planos ativos —
-// ver src/app/api/plans/route.ts no projeto prime-visita.
-const PLANS_API_URL = 'https://app.primevisita.com.br/api/plans';
+// O painel-admin permite cadastrar até 5 planos; some a isso o card fixo de
+// contato no fim da lista (não vem da API) e o total pode chegar a 6 cards.
+// A largura abaixo é dividida por igual entre o card de contato e os planos,
+// pra qualquer quantidade entre 1 e 5 planos formar linhas equilibradas e
+// centralizadas (flex-wrap + justify-center, em vez de grid) — sem "buraco"
+// na última linha.
+const CARD_WIDTH_CLASS = 'w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.334rem)]';
 
 export const PricingView: React.FC = () => {
   const router = useRouter();
-  const [plans, setPlans] = useState<ApiPlan[] | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const { plans, loading, error, reload: loadPlans } = usePlans();
   const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('yearly');
-
-  const loadPlans = () => {
-    setLoading(true);
-    setError(null);
-    fetch(PLANS_API_URL)
-      .then((res) => {
-        if (!res.ok) throw new Error(`status ${res.status}`);
-        return res.json();
-      })
-      .then((data) => setPlans(Array.isArray(data.plans) ? data.plans : []))
-      .catch(() => setError('Não foi possível carregar os planos agora. Tente novamente em instantes.'))
-      .finally(() => setLoading(false));
-  };
-
-  useEffect(() => {
-    loadPlans();
-  }, []);
 
   const handleCtaClick = (plan: ApiPlan) => {
     const period = plan.billingPeriod === 'YEARLY' ? 'yearly' : 'monthly';
@@ -73,6 +30,20 @@ export const PricingView: React.FC = () => {
   const visiblePlans = showPeriodToggle
     ? (plans ?? []).filter((p) => p.billingPeriod === (billingPeriod === 'yearly' ? 'YEARLY' : 'MONTHLY'))
     : plans ?? [];
+
+  // União de todas as funcionalidades que aparecem em qualquer plano — pra
+  // toda card listar o mesmo conjunto completo, marcando com X o que aquele
+  // plano específico não inclui (em vez de simplesmente omitir a linha).
+  const allFeatures: ApiPlanFeature[] = [];
+  const seenFeatureKeys = new Set<string>();
+  visiblePlans.forEach((p) => {
+    p.features.forEach((f) => {
+      if (!seenFeatureKeys.has(f.key)) {
+        seenFeatureKeys.add(f.key);
+        allFeatures.push(f);
+      }
+    });
+  });
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
@@ -146,19 +117,21 @@ export const PricingView: React.FC = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch max-w-6xl mx-auto"
+          className="flex flex-wrap justify-center items-stretch gap-8 max-w-6xl mx-auto"
         >
           {visiblePlans.map((plan) => {
             const isPopular = plan.featured ?? false;
             const isFree = plan.priceCents === 0;
             const suffix = plan.billingPeriod === 'YEARLY' ? '/ano' : '/mês';
+            const includedKeys = new Set(plan.features.map((f) => f.key));
+            const employeeLimitLabel = getEmployeeLimitLabel(plan);
 
             return (
               <div
                 key={plan.id}
-                className={`rounded-3xl p-6 sm:p-8 flex flex-col justify-between text-left transition-all duration-300 relative ${
+                className={`${CARD_WIDTH_CLASS} rounded-3xl p-6 sm:p-8 flex flex-col justify-between text-left transition-all duration-300 relative ${
                   isPopular
-                    ? 'bg-slate-950 text-white border-0 shadow-2xl scale-102 z-10 md:-translate-y-2'
+                    ? 'bg-slate-950 text-white border-0 shadow-2xl'
                     : 'border border-slate-200 bg-slate-50/50 hover:bg-white hover:border-slate-300 shadow-3xs'
                 }`}
               >
@@ -205,50 +178,46 @@ export const PricingView: React.FC = () => {
                     O que está incluso:
                   </p>
                   <ul className="space-y-2.5">
-                    {plan.features.map((feature) => (
-                      <li key={feature.key} className="flex items-start gap-2.5 text-xs leading-normal">
-                        <div className={`w-4.5 h-4.5 rounded-full flex items-center justify-center shrink-0 mt-0.5 border ${
-                          isPopular
-                            ? 'bg-blue-500/10 border-blue-500/20 text-blue-400'
-                            : 'bg-blue-50 border-blue-100 text-blue-600'
-                        }`}>
-                          <Check className="w-3 h-3 stroke-[3px]" />
-                        </div>
-                        <span className={`font-sans ${isPopular ? 'text-slate-300' : 'text-slate-600'}`}>{feature.label}</span>
-                      </li>
-                    ))}
+                    {allFeatures.map((feature) => {
+                      const included = includedKeys.has(feature.key);
+                      return (
+                        <li key={feature.key} className="flex items-start gap-2.5 text-xs leading-normal">
+                          <div className={`w-4.5 h-4.5 rounded-full flex items-center justify-center shrink-0 mt-0.5 border ${
+                            included
+                              ? isPopular
+                                ? 'bg-blue-500/10 border-blue-500/20 text-blue-400'
+                                : 'bg-blue-50 border-blue-100 text-blue-600'
+                              : isPopular
+                                ? 'bg-slate-800/40 border-slate-700 text-slate-600'
+                                : 'bg-slate-100 border-slate-200 text-slate-300'
+                          }`}>
+                            {included ? <Check className="w-3 h-3 stroke-[3px]" /> : <X className="w-3 h-3 stroke-[3px]" />}
+                          </div>
+                          <span className={`font-sans ${
+                            included
+                              ? isPopular ? 'text-slate-300' : 'text-slate-600'
+                              : isPopular ? 'text-slate-600' : 'text-slate-400'
+                          }`}>
+                            {feature.label}
+                          </span>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
 
-                {/* Usage Limits — only rendered once the API exposes them */}
-                {plan.limits?.users && plan.limits.users.length > 0 && (
+                {/* Employee limit — soma de todos os cargos, só aparece se a API expuser limites */}
+                {employeeLimitLabel !== null && (
                   <div className="space-y-3 mb-8">
-                    <p className={`text-[10px] font-mono font-bold uppercase tracking-wider ${isPopular ? 'text-slate-500' : 'text-slate-400'}`}>
-                      Limites do plano:
-                    </p>
-                    <ul className="space-y-1.5">
-                      {plan.limits.users.map((limit) => (
-                        <li key={limit.role} className="flex items-center justify-between gap-2 text-xs">
-                          <span className={`flex items-center gap-1.5 font-sans ${isPopular ? 'text-slate-300' : 'text-slate-600'}`}>
-                            <Users className="w-3 h-3 shrink-0 opacity-60" />
-                            {limit.label}
-                          </span>
-                          <span className={`font-mono font-semibold ${isPopular ? 'text-white' : 'text-slate-800'}`}>
-                            {limit.max === null ? 'Ilimitado' : limit.max}
-                          </span>
-                        </li>
-                      ))}
-                      {plan.limits.appointmentsPerWeek !== undefined && (
-                        <li className="flex items-center justify-between gap-2 text-xs">
-                          <span className={`font-sans ${isPopular ? 'text-slate-300' : 'text-slate-600'}`}>
-                            Agendamentos por semana
-                          </span>
-                          <span className={`font-mono font-semibold ${isPopular ? 'text-white' : 'text-slate-800'}`}>
-                            {plan.limits.appointmentsPerWeek === null ? 'Ilimitado' : plan.limits.appointmentsPerWeek}
-                          </span>
-                        </li>
-                      )}
-                    </ul>
+                    <div className="flex items-center justify-between gap-2 text-xs">
+                      <span className={`flex items-center gap-1.5 font-sans ${isPopular ? 'text-slate-300' : 'text-slate-600'}`}>
+                        <Users className="w-3.5 h-3.5 shrink-0 opacity-60" />
+                        Limite de funcionários
+                      </span>
+                      <span className={`font-mono font-semibold ${isPopular ? 'text-white' : 'text-slate-800'}`}>
+                        {employeeLimitLabel}
+                      </span>
+                    </div>
                   </div>
                 )}
 
@@ -271,7 +240,7 @@ export const PricingView: React.FC = () => {
           {/* Static contact-us card — not part of the API, always offered as a fallback */}
           <div
             key="contact-plan"
-            className="rounded-3xl p-6 sm:p-8 flex flex-col justify-between text-left border border-dashed border-blue-200 bg-blue-50/30 hover:bg-blue-50/60 transition-all duration-300"
+            className={`${CARD_WIDTH_CLASS} rounded-3xl p-6 sm:p-8 flex flex-col justify-between text-left border border-dashed border-blue-200 bg-blue-50/30 hover:bg-blue-50/60 transition-all duration-300`}
           >
             <div className="space-y-4">
               <div className="flex items-center justify-between">

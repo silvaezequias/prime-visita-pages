@@ -16,21 +16,26 @@ import {
   Ticket,
   Loader2,
   Info,
-  ChevronRight
+  ChevronRight,
+  Users,
+  AlertTriangle,
+  RefreshCw
 } from 'lucide-react';
-import { pricingPlans } from '../data';
+import { usePlans, getEmployeeLimitLabel } from '../lib/plans';
 
 type PaymentMethod = 'credit_card' | 'pix' | 'boleto';
 
 export const CheckoutView: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const selectedPlanName = searchParams.get('plan') || 'Profissional';
-  const selectedBillingPeriod: 'monthly' | 'yearly' = searchParams.get('billing') === 'monthly' ? 'monthly' : 'yearly';
+  const initialPlanName = searchParams.get('plan') || '';
 
-  // Plan & Billing state
-  const [planName, setPlanName] = useState<string>(selectedPlanName);
-  const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>(selectedBillingPeriod);
+  const { plans, loading, error, reload: loadPlans } = usePlans();
+
+  // Plan state — resolvido pra um plano real assim que a lista carrega;
+  // se o nome vindo da URL não bater com nenhum plano ativo (ex.: plano
+  // renomeado/desativado depois do link ser gerado), cai no mais barato.
+  const [planName, setPlanName] = useState<string>(initialPlanName);
   const [extraReps, setExtraReps] = useState<number>(0);
   
   // Payment states
@@ -60,19 +65,26 @@ export const CheckoutView: React.FC = () => {
   const [pixStatus, setPixStatus] = useState<'waiting' | 'paid'>('waiting');
   const [pixTimeLeft, setPixTimeLeft] = useState<number>(900); // 15 mins
 
-  // Find selected plan configuration
-  const currentPlan = pricingPlans.find(p => p.name === planName) || pricingPlans[1];
+  // Find selected plan configuration — plans já vem ordenado do mais barato
+  // pro mais caro (ver usePlans em lib/plans.ts).
+  const currentPlan = plans?.find(p => p.name === planName);
 
-  // Price calculations
-  const baseMonthlyPrice = billingPeriod === 'yearly' ? currentPlan.priceYearly : currentPlan.priceMonthly;
-  const extraRepCost = billingPeriod === 'yearly' ? 20 : 25; // per rep per month
+  useEffect(() => {
+    if (!loading && plans && plans.length > 0 && !plans.some(p => p.name === planName)) {
+      setPlanName(plans[0].name);
+    }
+  }, [loading, plans, planName]);
+
+  // Price calculations — cada plano real já tem UM preço fixo pro seu
+  // próprio ciclo de cobrança (mensal OU anual, nunca os dois), então não há
+  // mais "multiplicar por 12 meses" como no mock antigo.
+  const isYearly = currentPlan?.billingPeriod === 'YEARLY';
+  const periodSuffix = isYearly ? '/ano' : '/mês';
+  const basePrice = currentPlan ? currentPlan.priceCents / 100 : 0;
+  const extraRepCost = isYearly ? 20 : 25; // por representante extra, por ciclo de cobrança
   const extraRepsTotal = extraReps * extraRepCost;
-  const monthlySubtotal = baseMonthlyPrice + extraRepsTotal;
-  
-  // Calculate total depending on faturamento
-  const periodMonths = billingPeriod === 'yearly' ? 12 : 1;
-  let subtotal = monthlySubtotal * periodMonths;
-  
+  const subtotal = basePrice + extraRepsTotal;
+
   // Apply coupon
   let discountAmount = 0;
   if (appliedCoupon) {
@@ -82,8 +94,9 @@ export const CheckoutView: React.FC = () => {
       discountAmount = Math.min(appliedCoupon.discountValue, subtotal);
     }
   }
-  
+
   const finalTotal = Math.max(0, subtotal - discountAmount);
+  const employeeLimitLabel = currentPlan ? getEmployeeLimitLabel(currentPlan) : null;
 
   // Countdown timer for PIX simulation
   useEffect(() => {
@@ -208,6 +221,31 @@ export const CheckoutView: React.FC = () => {
     return 'Card';
   };
 
+  if (!isSuccess && loading) {
+    return (
+      <div className="max-w-3xl mx-auto py-24 px-4 text-center space-y-3 text-slate-400">
+        <Loader2 className="w-6 h-6 animate-spin text-blue-500 mx-auto" />
+        <p className="text-xs font-mono uppercase tracking-wider">Carregando plano...</p>
+      </div>
+    );
+  }
+
+  if (!isSuccess && (error || !currentPlan)) {
+    return (
+      <div className="max-w-md mx-auto py-24 px-4 text-center space-y-4">
+        <AlertTriangle className="w-8 h-8 text-amber-500 mx-auto" />
+        <p className="text-sm text-slate-600">{error ?? 'Plano não encontrado.'}</p>
+        <button
+          onClick={loadPlans}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-colors cursor-pointer"
+        >
+          <RefreshCw className="w-3.5 h-3.5" />
+          Tentar novamente
+        </button>
+      </div>
+    );
+  }
+
   if (isSuccess) {
     return (
       <div className="max-w-3xl mx-auto py-10 px-4 text-center space-y-8">
@@ -241,14 +279,14 @@ export const CheckoutView: React.FC = () => {
           
           <div className="space-y-2 text-xs">
             <div className="flex justify-between font-bold text-slate-800">
-              <span>Plano {planName} ({billingPeriod === 'yearly' ? 'Anual' : 'Mensal'})</span>
-              <span>{formatCurrency(baseMonthlyPrice * periodMonths)}</span>
+              <span>Plano {planName} ({isYearly ? 'Anual' : 'Mensal'})</span>
+              <span>{formatCurrency(basePrice)}</span>
             </div>
-            
+
             {extraReps > 0 && (
               <div className="flex justify-between text-slate-500">
                 <span>+ {extraReps} representates adicionais</span>
-                <span>{formatCurrency(extraRepsTotal * periodMonths)}</span>
+                <span>{formatCurrency(extraRepsTotal)}</span>
               </div>
             )}
 
@@ -302,6 +340,8 @@ export const CheckoutView: React.FC = () => {
       </div>
     );
   }
+
+  if (!currentPlan) return null;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
@@ -728,15 +768,15 @@ export const CheckoutView: React.FC = () => {
                 </div>
                 <div className="flex flex-col items-end">
                   <span className="text-xl sm:text-2xl font-extrabold text-white font-display">
-                    {formatCurrency(baseMonthlyPrice)}
+                    {basePrice === 0 ? 'Grátis' : formatCurrency(basePrice)}
                   </span>
                   <span className="text-slate-500 text-[10px] font-mono uppercase tracking-wider">
-                    /mês
+                    {periodSuffix}
                   </span>
                 </div>
               </div>
 
-              {/* Toggle or change plans within checkout */}
+              {/* Toggle or change plans within checkout — lista sempre os planos ativos reais */}
               <div className="space-y-2">
                 <label htmlFor="checkout-plan-select" className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500">
                   Alterar Plano da Assinatura:
@@ -750,44 +790,24 @@ export const CheckoutView: React.FC = () => {
                   }}
                   className="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs font-semibold text-white focus:outline-hidden focus:border-blue-500 cursor-pointer"
                 >
-                  <option value="Iniciante">Plano Iniciante (Até 3 reps)</option>
-                  <option value="Profissional">Plano Profissional (Até 15 reps)</option>
+                  {(plans ?? []).map((p) => (
+                    <option key={p.id} value={p.name}>
+                      {p.name} ({p.priceCents === 0 ? 'Grátis' : p.price}{p.billingPeriod === 'YEARLY' ? '/ano' : '/mês'})
+                    </option>
+                  ))}
                 </select>
               </div>
 
-              {/* Billing Cycle Switcher inside Cart */}
-              <div className="space-y-2 pt-2">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 block">
-                  Ciclo de Faturamento:
-                </span>
-                <div className="grid grid-cols-2 gap-2 bg-slate-900 p-1 rounded-xl border border-slate-800">
-                  <button
-                    type="button"
-                    onClick={() => setBillingPeriod('monthly')}
-                    className={`py-1.5 rounded-lg text-xs font-bold transition-all ${
-                      billingPeriod === 'monthly'
-                        ? 'bg-blue-600 text-white'
-                        : 'text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    Mensal
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setBillingPeriod('yearly')}
-                    className={`py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1 ${
-                      billingPeriod === 'yearly'
-                        ? 'bg-blue-600 text-white'
-                        : 'text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    Anual
-                    <span className="bg-emerald-500 text-slate-950 text-[8px] font-mono uppercase tracking-widest font-extrabold px-1 rounded-sm leading-none py-0.5">
-                      -20%
-                    </span>
-                  </button>
+              {/* Employee limit — soma de todos os cargos do plano selecionado */}
+              {employeeLimitLabel !== null && (
+                <div className="flex items-center justify-between gap-2 text-xs pt-2">
+                  <span className="flex items-center gap-1.5 font-mono uppercase tracking-wider text-slate-500 text-[10px] font-bold">
+                    <Users className="w-3.5 h-3.5 opacity-60" />
+                    Limite de Funcionários
+                  </span>
+                  <span className="text-white font-semibold font-sans">{employeeLimitLabel}</span>
                 </div>
-              </div>
+              )}
 
               {/* Interactive Multiplier: Number of representatives slider or select */}
               <div className="space-y-2 pt-2 border-t border-slate-900">
@@ -818,10 +838,10 @@ export const CheckoutView: React.FC = () => {
               <div className="pt-4 border-t border-slate-900 space-y-2 text-xs">
                 <span className="text-[9px] font-mono text-slate-500 uppercase tracking-widest font-bold">Incluso neste plano:</span>
                 <ul className="space-y-1.5">
-                  {currentPlan.features.slice(0, 4).map((f, i) => (
-                    <li key={i} className="flex items-center gap-2 text-slate-400">
+                  {currentPlan.features.slice(0, 4).map((f) => (
+                    <li key={f.key} className="flex items-center gap-2 text-slate-400">
                       <Check className="w-3.5 h-3.5 text-blue-400 shrink-0" />
-                      <span className="truncate">{f}</span>
+                      <span className="truncate">{f.label}</span>
                     </li>
                   ))}
                   {extraReps > 0 && (
@@ -898,23 +918,18 @@ export const CheckoutView: React.FC = () => {
             <div className="space-y-2.5 text-xs">
               <div className="flex justify-between text-slate-500">
                 <span>
-                  Plano {planName} 
+                  Plano {planName}
                   <span className="font-semibold block sm:inline sm:ml-1">
-                    ({billingPeriod === 'yearly' ? '12 meses' : '1 mês'})
+                    ({isYearly ? 'Cobrança anual' : 'Cobrança mensal'})
                   </span>
                 </span>
-                <span>{formatCurrency(baseMonthlyPrice * periodMonths)}</span>
+                <span>{formatCurrency(basePrice)}</span>
               </div>
-              
+
               {extraReps > 0 && (
                 <div className="flex justify-between text-slate-500">
-                  <span>
-                    +{extraReps} representantes extras 
-                    <span className="font-semibold block sm:inline sm:ml-1">
-                      ({billingPeriod === 'yearly' ? '12 meses' : '1 mês'})
-                    </span>
-                  </span>
-                  <span>{formatCurrency(extraRepsTotal * periodMonths)}</span>
+                  <span>+{extraReps} representantes extras</span>
+                  <span>{formatCurrency(extraRepsTotal)}</span>
                 </div>
               )}
 
@@ -926,18 +941,11 @@ export const CheckoutView: React.FC = () => {
               )}
 
               <div className="h-[1px] bg-slate-200 my-2"></div>
-              
+
               <div className="flex justify-between text-slate-800">
                 <span className="font-bold">Subtotal de Cobrança</span>
                 <span>{formatCurrency(finalTotal)}</span>
               </div>
-
-              {billingPeriod === 'yearly' && (
-                <div className="text-[10px] text-emerald-600 font-mono flex items-start gap-1">
-                  <Check className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
-                  <span>Você economizou {formatCurrency((currentPlan.priceMonthly - currentPlan.priceYearly) * 12)} com a opção de faturamento anual!</span>
-                </div>
-              )}
             </div>
           </div>
 
