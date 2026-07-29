@@ -5,6 +5,11 @@ export const dynamic = 'force-static';
 
 // Só páginas institucionais públicas — /checkout (simulador, depende de query
 // string) e /docs (placeholder "em breve") ficam de fora, ver robots.ts.
+//
+// URLs com barra final: com trailingSlash: true (next.config.ts) o build
+// gera /pricing/index.html em vez de /pricing.html — precisa bater com o que
+// a hospedagem estática realmente serve, senão o Google indexa uma URL que
+// redireciona (ou pior, dá 404) em vez da canônica.
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
 
@@ -16,25 +21,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: `${SITE_URL}/pricing`,
+      url: `${SITE_URL}/pricing/`,
       lastModified,
       changeFrequency: 'weekly',
       priority: 0.9,
     },
     {
-      url: `${SITE_URL}/contact`,
+      url: `${SITE_URL}/contact/`,
       lastModified,
       changeFrequency: 'monthly',
       priority: 0.6,
     },
     {
-      url: `${SITE_URL}/privacy`,
+      url: `${SITE_URL}/privacy/`,
       lastModified,
       changeFrequency: 'yearly',
       priority: 0.3,
     },
     {
-      url: `${SITE_URL}/terms`,
+      url: `${SITE_URL}/terms/`,
       lastModified,
       changeFrequency: 'yearly',
       priority: 0.3,
